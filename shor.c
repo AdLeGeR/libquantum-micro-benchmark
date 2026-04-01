@@ -41,8 +41,16 @@
 #include "specrand.h"
 #endif /* SPEC_CPU */
 
-int main(int argc, char **argv) {
+#if !defined(LOGS_PATH)
+#define LOGS_PATH "../logs/log.txt"
+#endif
 
+FILE *out = NULL;
+
+
+int main(int argc, char **argv) {
+  
+  out = fopen(LOGS_PATH, "w");
   quantum_reg qr;
   int i;
   int width, swidth;
@@ -178,5 +186,6 @@ int main(int argc, char **argv) {
 
   /*  printf("Memory leak: %i bytes\n", (int) quantum_memman(0)); */
 
+  fclose(out);
   return 0;
 }
