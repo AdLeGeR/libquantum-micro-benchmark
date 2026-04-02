@@ -45,8 +45,6 @@
 #define LOGS_PATH "../logs/arglog"
 #endif
 
-FILE *out = NULL;
-
 #if !defined(CALL_NUMBERS)
 #define CALL_NUMBERS {}
 #define CALL_COUNT 0
@@ -56,7 +54,6 @@ int call_numbers[CALL_COUNT] = CALL_NUMBERS;
 
 int main(int argc, char **argv) {
 
-  out = fopen(LOGS_PATH, "wb");
   printf("%s\n", LOGS_PATH);
   quantum_reg qr;
   int i;
@@ -193,6 +190,5 @@ int main(int argc, char **argv) {
 
   /*  printf("Memory leak: %i bytes\n", (int) quantum_memman(0)); */
 
-  fclose(out);
   return 0;
 }
