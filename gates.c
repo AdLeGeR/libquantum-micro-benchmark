@@ -71,9 +71,28 @@ quantum_cnot(int control, int target, quantum_reg *reg)
 
 /* Apply a toffoli (or controlled-controlled-not) gate */
 
+
+extern FILE *out;
+extern int call_numbers[CALL_COUNT];
+static int count = 0;
+static int numbers_i = 0;
 void
 quantum_toffoli(int control1, int control2, int target, quantum_reg *reg)
 {
+  if(numbers_i < CALL_COUNT && count == call_numbers[numbers_i]){
+	 struct log_struct{
+	    int control1;
+	    int control2;
+	    int target;
+	};
+    struct log_struct log = {control1, control2, target};
+    fwrite(&log, sizeof(struct log_struct), 1, out);
+    fwrite(reg, sizeof(struct quantum_reg_struct), 1, out);
+    fwrite(reg->node, sizeof(struct quantum_reg_node_struct), reg->size, out);
+    fwrite(reg->hash, sizeof(int), reg->hashw, out);
+    numbers_i++;
+  }
+  count++; 
   int i;
   int qec;
 
