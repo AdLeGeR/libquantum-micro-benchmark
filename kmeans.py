@@ -29,6 +29,7 @@ result_indices = {}
 for cluster_id in range(k):
     # индексы точек, принадлежащих кластеру
     cluster_points_idx = np.where(labels == cluster_id)[0]
+
     
     # значения этих точек
     cluster_points = data[cluster_points_idx].flatten()
@@ -45,11 +46,11 @@ for cluster_id in range(k):
     # берём 10 ближайших
     top_10_idx = cluster_points_idx[sorted_idx[:10]]
     
-    result_indices[cluster_id] = top_10_idx
+    result_indices[cluster_id] = [top_10_idx, len(cluster_points_idx)]
 
 # вывод
 for cluster_id, idxs in result_indices.items():
-    print(f"Кластер {cluster_id}: {idxs}")
+    print(f"Кластер {cluster_id}: Количество: {idxs[1]}, top 10: {idxs[0]}")
 
 
 # ---- ВИЗУАЛИЗАЦИЯ ----
