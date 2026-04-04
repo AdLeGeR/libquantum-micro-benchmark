@@ -72,7 +72,8 @@ quantum_cnot(int control, int target, quantum_reg *reg)
 /* Apply a toffoli (or controlled-controlled-not) gate */
 
 #include <omp.h>
-extern FILE *out;
+extern double times[LOGS_COUNT];
+extern int count;
 void
 quantum_toffoli(int control1, int control2, int target, quantum_reg *reg)
 {
@@ -105,7 +106,9 @@ quantum_toffoli(int control1, int control2, int target, quantum_reg *reg)
       quantum_decohere(reg);
     }
   double end = omp_get_wtime();
-  fprintf(out, "%lf\n", end-start);
+  times[count] = end - start;
+  count++;
+
 }
 
 /* Apply an unbounded toffoli gate. This gate is not considered

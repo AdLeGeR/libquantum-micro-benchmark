@@ -46,11 +46,16 @@
 #endif
 
 FILE *out = NULL;
+#if !defined(LOGS_COUNT)
+#define LOGS_COUNT 0 
+#endif
+
+double times[LOGS_COUNT];
+int count = 0;
 
 
 int main(int argc, char **argv) {
   
-  out = fopen(LOGS_PATH, "w");
   quantum_reg qr;
   int i;
   int width, swidth;
@@ -186,6 +191,10 @@ int main(int argc, char **argv) {
 
   /*  printf("Memory leak: %i bytes\n", (int) quantum_memman(0)); */
 
+  out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
   fclose(out);
   return 0;
 }
