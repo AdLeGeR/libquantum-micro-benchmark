@@ -81,20 +81,32 @@ quantum_toffoli(int control1, int control2, int target, quantum_reg *reg)
 {
   if(numbers_i < CALL_COUNT && count == call_numbers[numbers_i]){
     char logs_path[100] = LOGS_PATH;
-    char number[10];
-    snprintf(number, 10, "%d", count);
-    strcat(logs_path, number);
-    FILE *out = fopen(logs_path, "wb"); 
-	 struct log_struct{
-	    int control1;
-	    int control2;
-	    int target;
-	};
-    struct log_struct log = {control1, control2, target};
-    fwrite(&log, sizeof(struct log_struct), 1, out);
-    fwrite(reg, sizeof(struct quantum_reg_struct), 1, out);
-    fwrite(reg->node, sizeof(struct quantum_reg_node_struct), reg->size, out);
-    fwrite(reg->hash, sizeof(int), reg->hashw, out);
+    char num_end[15];
+    snprintf(num_end, 15, "%d", count);
+    strcat(num_end, ".h");
+    strcat(logs_path, num_end);
+    FILE *out = fopen(logs_path, "w"); 
+    fprintf(out, "struct quantum_reg qreg%d = {\n", count);
+    fprintf(out, "\t.width=%d,\n", reg->width);
+    fprintf(out, "\t.size=%d,\n", reg->size);
+    fprintf(out, "\t.hashw=%d,\n", reg->hashw);
+    fprintf(out, "\t.node={\n");
+    for(int i1 =0; i1 < reg->size; i1++){
+      fprintf(out, "\t\t{ .amplitude=%f + %f*I, .state=%lld },\n", creal(reg->node[i1].amplitude), cimag(reg->node[i1].amplitude), reg->node[i1].state);
+    }
+    fprintf(out, "\t},\n");
+    fprintf(out, "\t.hash={\n");
+    for(int i1 = 0; i1 < reg->hashw; i1++){
+      fprintf(out, "\t\t%d,\n", reg->hash[i1]);
+    }
+    fprintf(out, "\t}\n");
+    fprintf(out, "};\n");
+    fprintf(out, "struct arg_log log%d = {\n", count);
+    fprintf(out, "\t.control1 = %d,\n", control1);
+    fprintf(out, "\t.control2 = %d,\n", control2);
+    fprintf(out, "\t.target= %d,\n", target);
+    fprintf(out, "\t.reg=&qreg%d\n", count);
+    fprintf(out, "};\n");
     numbers_i++;
     fclose(out);
   }
