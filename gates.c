@@ -86,20 +86,23 @@ quantum_toffoli(int control1, int control2, int target, quantum_reg *reg)
     strcat(num_end, ".h");
     strcat(logs_path, num_end);
     FILE *out = fopen(logs_path, "w"); 
+    //fprintf(out, "struct arg_log{\n\tint control1,\n\tint control2,\n\tint target,\n\tquantum reg\n};");
+    fprintf(out, "struct quantum_reg_node_struct node%d[%d] = {\n", count, reg->size);
+    for(int i1 =0; i1 < reg->size; i1++){
+      fprintf(out, "\t{ .amplitude=%f + %f*I, .state=%lld },\n", creal(reg->node[i1].amplitude), cimag(reg->node[i1].amplitude), reg->node[i1].state);
+    }
+    fprintf(out, "};\n");
+    fprintf(out, "struct int hash[%d]={\n", count);
+    for(int i1 = 0; i1 < reg->hashw; i1++){
+      fprintf(out, "\t%d,\n", reg->hash[i1]);
+    }
+    fprintf(out, "};\n");
     fprintf(out, "struct quantum_reg qreg%d = {\n", count);
     fprintf(out, "\t.width=%d,\n", reg->width);
     fprintf(out, "\t.size=%d,\n", reg->size);
     fprintf(out, "\t.hashw=%d,\n", reg->hashw);
-    fprintf(out, "\t.node={\n");
-    for(int i1 =0; i1 < reg->size; i1++){
-      fprintf(out, "\t\t{ .amplitude=%f + %f*I, .state=%lld },\n", creal(reg->node[i1].amplitude), cimag(reg->node[i1].amplitude), reg->node[i1].state);
-    }
-    fprintf(out, "\t},\n");
-    fprintf(out, "\t.hash={\n");
-    for(int i1 = 0; i1 < reg->hashw; i1++){
-      fprintf(out, "\t\t%d,\n", reg->hash[i1]);
-    }
-    fprintf(out, "\t}\n");
+    fprintf(out, "\t.node=node%d,\n", count);
+    fprintf(out, "\t.hash=hash%d,\n", count);
     fprintf(out, "};\n");
     fprintf(out, "struct arg_log log%d = {\n", count);
     fprintf(out, "\t.control1 = %d,\n", control1);
