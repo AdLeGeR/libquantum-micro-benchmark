@@ -46,34 +46,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct log_struct{
-    int control1;
-    int control2;
-    int target;
-};
+#include "arglog5000.h"
 
-struct log_struct logs[] = {}
+struct arg_log *logs[1] = {&log5000};
+int repeat_count[1] = {1};
 int main(int argc, char **argv) {
 
     double total_time = 0;
     size_t logs_length = sizeof(logs)/sizeof(logs[0]);
     for(int i = 0; i < logs_length; i++){
    
-      // 1. читаем log_struct
-      struct log_struct log = logs[i];
+      // 1. читаем arg_log
+      struct arg_log* log = logs[i];
 
-      int c1 = log.control1;
-      int c2 = log.control2;
-      int tg = log.target;
+      int c1 = log->control1;
+      int c2 = log->control2;
+      int tg = log->target;
 
       // 2. читаем quantum_reg_struct (но указатели игнорируем!)
       quantum_reg* reg = malloc(sizeof(quantum_reg));
-      struct quantum_reg_struct tmp_reg = log->reg;
+      struct quantum_reg_struct* tmp_reg = log->reg;
       
       // копируем только полезные поля
-      reg->width = tmp_reg.width;
-      reg->size  = tmp_reg.size;
-      reg->hashw = tmp_reg.hashw;
+      reg->width = tmp_reg->width;
+      reg->size  = tmp_reg->size;
+      reg->hashw = tmp_reg->hashw;
 
       // 3. выделяем память
       reg->node = (quantum_reg_node*)malloc(reg->size * sizeof(quantum_reg_node));
@@ -95,7 +92,7 @@ int main(int argc, char **argv) {
       temp_reg->node = malloc(sizeof(quantum_reg_node) * reg->size);
       temp_reg->hash = malloc(sizeof(int) * reg->hashw);
       double hotspot_time = 0;
-      for(int j = 0 ; j < repeat_count; j++){
+      for(int j = 0 ; j < repeat_count[i]; j++){
         temp_reg->width = reg->width;
         temp_reg->size  = reg->size;
         temp_reg->hashw = reg->hashw;
