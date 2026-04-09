@@ -179,7 +179,12 @@ int main(int argc, char **argv) {
     }
   else
     {
-      printf("Unable to determine factors, try again.\n");
+    out = fopen(LOGS_PATH, "w");
+    for(int i = 0; i < count && i < LOGS_COUNT; i++){
+      fprintf(out, "%lf\n", times[i]);
+    }
+    fclose(out);
+    printf("Unable to determine factors, try again.\n");
 #if defined(SPEC_CPU)
 	exit(0);
 #else

@@ -14,7 +14,7 @@ with open(join(normpath(join(split(__file__)[0], "../logs")), "log.txt")) as f:
 
 data = np.array([log for log in logs]).reshape(-1, 1)
 
-k = 13
+k = 8
 model = KMeans(n_clusters=k, n_init='auto', random_state=97)
 model.fit(data)
 
