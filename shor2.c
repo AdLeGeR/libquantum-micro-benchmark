@@ -53,10 +53,10 @@ struct log_struct{
 };
 
 int main(int argc, char **argv) {
-
-    for(int i = 1; i+1 < argc; i+=2){
-	    char* log_file = argv[i];
-	    int repeat_count = strtol(argv[i+1], NULL, 10);
+  double total_time = 0;
+  for(int i = 1; i+1 < argc; i+=2){
+    char* log_file = argv[i];
+    int repeat_count = strtol(argv[i+1], NULL, 10);
 
     FILE *file = fopen(log_file, "rb");
     if (!file) {
@@ -97,10 +97,10 @@ int main(int argc, char **argv) {
     // проверка
     //printf("%d %d %d %d %d %d\n", c1, c2, tg,
     //      reg->width, reg->size, reg->hashw);
-   quantum_reg* temp_reg = malloc(sizeof(quantum_reg));
+    quantum_reg* temp_reg = malloc(sizeof(quantum_reg));
     temp_reg->node = malloc(sizeof(quantum_reg_node) * reg->size);
     temp_reg->hash = malloc(sizeof(int) * reg->hashw);
-    double start = omp_get_wtime();
+    double hotspot_run = 0;
     for(int j = 0 ; j < repeat_count; j++){
         temp_reg->width = reg->width;
         temp_reg->size  = reg->size;
@@ -112,13 +112,16 @@ int main(int argc, char **argv) {
         memcpy(temp_reg->hash, reg->hash,
               sizeof(int) * reg->hashw);
 
+      double start = omp_get_wtime();
         quantum_toffoli(c1, c2, tg, temp_reg);
+      double end = omp_get_wtime();
+      hotspot_run += end-start;
     }
 
     free(temp_reg->hash);
     free(temp_reg->node);
     free(temp_reg);
-    double end = omp_get_wtime();
-    printf("%lf\n", (double)(end-start));
-    }
+    printf("%lf\n", hotspot_run);
+  }
+  printf("total time: %lf\n", total_time);
 }
