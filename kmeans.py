@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans
 from os.path import join, normpath, split
 logs = []
 
-with open(join(normpath(join(split(__file__)[0], "../logs")), "log.txt")) as f:
+with open(join(normpath(join(split(__file__)[0], "../logs")), "mean_logs.txt")) as f:
     j = 0
     for line in f.readlines():
         logs.append(float(line))
@@ -52,6 +52,11 @@ for cluster_id in range(k):
 for cluster_id, idxs in result_indices.items():
     print(f"Кластер {cluster_id}: Количество: {idxs[1]}, top 10: {idxs[0]}")
 
+print("./compile.sh \\{"+",".join([str(idxs[0][0]) for idxs in result_indices.values()])+"\\} 10 mean_clusters")
+
+print("../bin/run_hotspots ", end = "" )
+for i in result_indices.values():
+    print(f"../logs/mean_clusters{i[0][0]} 10 ", end="")
 
 # ---- ВИЗУАЛИЗАЦИЯ ----
 plt.figure(figsize=(10, 6))
