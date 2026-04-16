@@ -49,13 +49,17 @@ for cluster_id in range(k):
     result_indices[cluster_id] = [top_10_idx, len(cluster_points_idx)]
 
 # вывод
+centers = []
 for cluster_id, idxs in result_indices.items():
     print(f"Кластер {cluster_id}: Количество: {idxs[1]}, top 10: {idxs[0]}")
+    centers.append(idxs[0][0])
 
-print("./compile.sh \\{"+",".join([str(idxs[0][0]) for idxs in result_indices.values()])+"\\} 10 mean_clusters")
+centers.sort()
+centers = [str(i) for i in centers]
+print("./compile.sh \\{"+",".join(centers)+"\\} 10 mean_clusters")
 
 print("../bin/run_hotspots ", end = "" )
-for i in result_indices.values():
+for i in centers:
     print(f"../logs/mean_clusters{i[0][0]} 10 ", end="")
 
 # ---- ВИЗУАЛИЗАЦИЯ ----
