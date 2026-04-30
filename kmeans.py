@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans
 from os.path import join, normpath, split
 logs = []
 
-with open(join(normpath(join(split(__file__)[0], "../logs")), "mean_logs.txt")) as f:
+with open(join(normpath(join(split(__file__)[0], "../logs")), "median_logs.txt")) as f:
     j = 0
     for line in f.readlines():
         logs.append(float(line))
