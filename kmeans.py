@@ -70,7 +70,7 @@ centers.sort()
 centers = [str(i) for i in centers]
 
 if len(sys.argv) > 3:
-    print("\\{"+",".join(centers)+"\\}\n"+str(k))
+    print("\\{"+",".join(centers)+"\\}")
 else:
     print("./compile.sh \\{"+",".join(centers)+"\\} "+str(k)+" mean_clusters")
 
