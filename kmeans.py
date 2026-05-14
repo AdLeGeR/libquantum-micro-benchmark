@@ -9,7 +9,7 @@ import sys
 
 args = sys.argv
 if len(sys.argv) > 1:
-    k = sys.argv[1]
+    k = int(sys.argv[1])
 else:
     k = 8
 
