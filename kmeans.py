@@ -13,7 +13,12 @@ if len(sys.argv) > 1:
 else:
     k = 8
 
-with open(join(normpath(join(split(__file__)[0], "../logs")), "median_logs.txt")) as f:
+if len(sys.argv) > 2:
+    file = sys.argv[2]
+else:
+    file = "median_logs.txt"
+
+with open(join(normpath(join(split(__file__)[0], "../logs")), file)) as f:
     j = 0
     for line in f.readlines():
         logs.append(float(line))
@@ -63,11 +68,11 @@ for cluster_id, idxs in result_indices.items():
 
 centers.sort()
 centers = [str(i) for i in centers]
-print("./compile.sh \\{"+",".join(centers)+"\\} "+k+" mean_clusters")
+print("./compile.sh \\{"+",".join(centers)+"\\} "+str(k)+" mean_clusters")
 
 print("../bin/run_hotspots ", end = "" )
 for i in centers:
-    print(f"../logs/mean_clusters{i[0][0]} 10 ", end="")
+    print(f"../logs/mean_clusters{i} 10 ", end="")
 
 # ---- ВИЗУАЛИЗАЦИЯ ----
 plt.figure(figsize=(10, 6))
