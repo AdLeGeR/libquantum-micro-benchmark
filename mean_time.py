@@ -39,7 +39,7 @@ for i in range(len(raw_logs[0])):
         new_mean += cur_logs[j]/len(cur_logs)
     mean_logs.append(new_mean)
 
-with open("../logs/mean_logs.txt", "w") as f:
+with open(file, "w") as f:
     for i in mean_logs:
         f.write(str(i)+"\n")
 
