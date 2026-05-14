@@ -5,6 +5,14 @@ from sklearn.cluster import KMeans
 from os.path import join, normpath, split
 logs = []
 
+import sys
+
+args = sys.argv
+if len(sys.argv) > 1:
+    k = sys.argv[1]
+else:
+    k = 8
+
 with open(join(normpath(join(split(__file__)[0], "../logs")), "median_logs.txt")) as f:
     j = 0
     for line in f.readlines():
@@ -14,7 +22,6 @@ with open(join(normpath(join(split(__file__)[0], "../logs")), "median_logs.txt")
 
 data = np.array([log for log in logs]).reshape(-1, 1)
 
-k = 8
 model = KMeans(n_clusters=k, n_init='auto', random_state=97)
 model.fit(data)
 
@@ -56,7 +63,7 @@ for cluster_id, idxs in result_indices.items():
 
 centers.sort()
 centers = [str(i) for i in centers]
-print("./compile.sh \\{"+",".join(centers)+"\\} 10 mean_clusters")
+print("./compile.sh \\{"+",".join(centers)+"\\} "+k+" mean_clusters")
 
 print("../bin/run_hotspots ", end = "" )
 for i in centers:
