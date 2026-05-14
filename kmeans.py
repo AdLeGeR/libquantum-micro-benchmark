@@ -68,7 +68,11 @@ for cluster_id, idxs in result_indices.items():
 
 centers.sort()
 centers = [str(i) for i in centers]
-print("./compile.sh \\{"+",".join(centers)+"\\} "+str(k)+" mean_clusters")
+
+if len(sys.argv) > 3:
+    print("\\{"+",".join(centers)+"\\}\n"+str(k))
+else:
+    print("./compile.sh \\{"+",".join(centers)+"\\} "+str(k)+" mean_clusters")
 
 print("../bin/run_hotspots ", end = "" )
 for i in centers:
