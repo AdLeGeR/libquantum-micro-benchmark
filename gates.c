@@ -165,11 +165,6 @@ if(numbers_i < CALL_COUNT && count == call_numbers[numbers_i]){
     snprintf(number, 10, "%d", count);
     strcat(logs_path, number);
     FILE *out = fopen(logs_path, "wb"); 
-         struct log_struct{
-            int control1;
-            int control2;
-            int target;
-        };
     fwrite(&target, sizeof(target), 1, out);
     fwrite(reg, sizeof(struct quantum_reg_struct), 1, out);
     fwrite(reg->node, sizeof(struct quantum_reg_node_struct), reg->size, out);
