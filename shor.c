@@ -167,6 +167,11 @@ return 3;
     
   if(q % 2 == 1)
     {
+out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
+  fclose(out);
       printf("Odd period, try again.\n");
       exit(2);
     }
@@ -190,6 +195,11 @@ return 3;
     }
   else
     {
+out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
+  fclose(out);
       printf("Unable to determine factors, try again.\n");
 #if defined(SPEC_CPU)
 	exit(0);
