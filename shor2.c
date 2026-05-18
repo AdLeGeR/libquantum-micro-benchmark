@@ -48,10 +48,12 @@
 
 int main(int argc, char **argv) {
   double total_time = 0;
+    
   for(int i = 1; i+1 < argc; i+=2){
     char* log_file = argv[i];
     int repeat_count = strtol(argv[i+1], NULL, 10);
 
+    
     FILE *file = fopen(log_file, "rb");
     if (!file) {
         perror("Can't open file");
@@ -59,40 +61,46 @@ int main(int argc, char **argv) {
     }
 
     quantum_reg* reg = malloc(sizeof(quantum_reg));
+    
     // 1. читаем log_struct
-    int* tglink ;
-    fread(&tglink, sizeof(int), 1, file);
+    int tg;
+    fread(&tg, sizeof(int), 1, file);
 
-    int tg = *tglink;
-
+    
     // 2. читаем quantum_reg_struct (но указатели игнорируем!)
     struct quantum_reg_struct tmp_reg;
     fread(&tmp_reg, sizeof(struct quantum_reg_struct), 1, file);
 
+    
     // копируем только полезные поля
     reg->width = tmp_reg.width;
     reg->size  = tmp_reg.size;
     reg->hashw = tmp_reg.hashw;
 
+    
     // 3. выделяем память
     reg->node = (quantum_reg_node*)malloc(reg->size * sizeof(quantum_reg_node));
     reg->hash = (int*)malloc(reg->hashw * sizeof(int));
 
+    
     // 4. читаем node массив
     fread(reg->node, sizeof(struct quantum_reg_node_struct), reg->size, file);
 
     // 5. читаем hash массив
     fread(reg->hash, sizeof(int), reg->hashw, file);
 
+    
     fclose(file);
 
     // проверка
     //printf("%d %d %d %d %d %d\n", c1, c2, tg,
     //      reg->width, reg->size, reg->hashw);
+    
     quantum_reg* temp_reg = malloc(sizeof(quantum_reg));
     temp_reg->node = malloc(sizeof(quantum_reg_node) * reg->size);
     temp_reg->hash = malloc(sizeof(int) * reg->hashw);
     double hotspot_run = 0;
+    
     for(int j = 0 ; j < repeat_count; j++){
         temp_reg->width = reg->width;
         temp_reg->size  = reg->size;
@@ -109,11 +117,12 @@ int main(int argc, char **argv) {
       double end = omp_get_wtime();
       hotspot_run += end-start;
     }
-
+    
     free(temp_reg->hash);
     free(temp_reg->node);
     free(temp_reg);
     printf("%lf\n", hotspot_run);
+    total_time += hotspot_run;
   }
   printf("total time: %lf\n", total_time);
 }
