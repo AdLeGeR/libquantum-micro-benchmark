@@ -1,7 +1,7 @@
 from math import sqrt
 import sys
-if len(sys.argv)>1:
-    file = sys.argv[1]
+if len(sys.argv)>2:
+    file = sys.argv[2]
 else:
     file = "../logs/logarr.txt"
 
@@ -14,7 +14,7 @@ raw_logs = []
 logs_count = count
 for i in range(logs_count):
     raw_logs.append([])
-    with open(file[:-4]+str(i)+file[-4:]) as f:
+    with open(file[:-4]+str(i+1)+file[-4:]) as f:
         lines = f.readlines()
     for j in range(len(lines)):
         raw_logs[i].append(float(lines[j]))
