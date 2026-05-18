@@ -170,7 +170,7 @@ if(numbers_i < CALL_COUNT && count == call_numbers[numbers_i]){
             int control2;
             int target;
         };
-    fwrite(&log, sizeof(target), 1, out);
+    fwrite(&target, sizeof(target), 1, out);
     fwrite(reg, sizeof(struct quantum_reg_struct), 1, out);
     fwrite(reg->node, sizeof(struct quantum_reg_node_struct), reg->size, out);
     fwrite(reg->hash, sizeof(int), reg->hashw, out);
