@@ -43,9 +43,15 @@
 #endif /* SPEC_CPU */
 /* Apply a controlled-not gate */
 
+#include <omp.h>
+extern double times[LOGS_COUNT];
+extern int count;
+
 void
 quantum_cnot(int control, int target, quantum_reg *reg)
 {
+  double start = omp_get_wtime();
+double end ;
   int i;
   int qec;
 
@@ -56,8 +62,13 @@ quantum_cnot(int control, int target, quantum_reg *reg)
   else
     {
       if(quantum_objcode_put(CNOT, control, target))
-	return;
-      
+{	
+ end = omp_get_wtime();
+  times[count] = end - start;
+  count++;
+
+return;
+ }     
       for(i=0; i<reg->size; i++)
 	{
 	  /* Flip the target bit of a basis state if the control bit is set */
@@ -67,6 +78,11 @@ quantum_cnot(int control, int target, quantum_reg *reg)
 	}
       quantum_decohere(reg);
     }
+
+ end = omp_get_wtime();
+  times[count] = end - start;
+  count++;
+
 }
 
 /* Apply a toffoli (or controlled-controlled-not) gate */
