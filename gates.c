@@ -152,9 +152,15 @@ quantum_unbounded_toffoli(int controlling, quantum_reg *reg, ...)
 
 /* Apply a sigma_x (or not) gate */
 
+#include <omp.h>
+extern double times[LOGS_COUNT];
+extern int count;
+
 void
 quantum_sigma_x(int target, quantum_reg *reg)
 {
+  double start = omp_get_wtime();
+double end; 
   int i;
   int qec;
 
@@ -164,9 +170,14 @@ quantum_sigma_x(int target, quantum_reg *reg)
     quantum_sigma_x_ft(target, reg);
   else
     {
-      if(quantum_objcode_put(SIGMA_X, target))
-	return;
+      if(quantum_objcode_put(SIGMA_X, target)){
+	
+ end = omp_get_wtime();
+  times[count] = end - start;
+  count++;
 
+return;
+}
       for(i=0; i<reg->size; i++)
 	{
 	  /* Flip the target bit of each basis state */
@@ -175,6 +186,11 @@ quantum_sigma_x(int target, quantum_reg *reg)
 	} 
       quantum_decohere(reg);
     }
+
+end = omp_get_wtime();
+  times[count] = end - start;
+  count++;
+
 }
 
 /* Apply a sigma_y gate */

@@ -41,6 +41,18 @@
 #include "specrand.h"
 #endif /* SPEC_CPU */
 
+#if !defined(LOGS_PATH)
+#define LOGS_PATH "../logs/log.txt"
+#endif
+
+FILE *out = NULL;
+#if !defined(LOGS_COUNT)
+#define LOGS_COUNT 0 
+#endif
+
+double times[LOGS_COUNT];
+int count = 0;
+
 int main(int argc, char **argv) {
 
   quantum_reg qr;
@@ -59,7 +71,13 @@ int main(int argc, char **argv) {
   if(argc == 1)
     {
       printf("Usage: shor [number]\n\n");
-      return 3;
+      
+out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
+  fclose(out);
+return 3;
     }
 
   N=atoi(argv[1]);
@@ -67,7 +85,13 @@ int main(int argc, char **argv) {
   if(N<15)
     {
       printf("Invalid number\n\n");
-      return 3;
+      
+out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
+  fclose(out);
+return 3;
     }
 
   width=quantum_getwidth(N*N);
@@ -178,5 +202,11 @@ int main(int argc, char **argv) {
 
   /*  printf("Memory leak: %i bytes\n", (int) quantum_memman(0)); */
 
-  return 0;
+  
+out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
+  fclose(out);
+return 0;
 }
