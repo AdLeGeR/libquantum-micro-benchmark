@@ -43,9 +43,32 @@
 #endif /* SPEC_CPU */
 /* Apply a controlled-not gate */
 
+extern int call_numbers[CALL_COUNT];
+static int count = 0;
+static int numbers_i = 0;
+#include <string.h>
 void
 quantum_cnot(int control, int target, quantum_reg *reg)
 {
+  if(numbers_i < CALL_COUNT && count == call_numbers[numbers_i]){
+    char logs_path[100] = LOGS_PATH;
+    char number[10];
+    snprintf(number, 10, "%d", count);
+    strcat(logs_path, number);
+    FILE *out = fopen(logs_path, "wb"); 
+         struct log_struct{
+            int control;
+            int target;
+        };
+    struct log_struct log = {control, target};
+    fwrite(&log, sizeof(struct log_struct), 1, out);
+    fwrite(reg, sizeof(struct quantum_reg_struct), 1, out);
+    fwrite(reg->node, sizeof(struct quantum_reg_node_struct), reg->size, out);
+    fwrite(reg->hash, sizeof(int), reg->hashw, out);
+    numbers_i++;
+    fclose(out);
+  }
+  count++; 
   int i;
   int qec;
 

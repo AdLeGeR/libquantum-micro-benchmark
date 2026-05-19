@@ -41,6 +41,19 @@
 #include "specrand.h"
 #endif /* SPEC_CPU */
 
+
+#if !defined(LOGS_PATH)
+#define LOGS_PATH "../logs/arglog"
+#endif
+
+#if !defined(CALL_NUMBERS)
+#define CALL_NUMBERS {}
+#define CALL_COUNT 0
+#endif
+
+int call_numbers[CALL_COUNT] = CALL_NUMBERS;
+
+
 int main(int argc, char **argv) {
 
   quantum_reg qr;
