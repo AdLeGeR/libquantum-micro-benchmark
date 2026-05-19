@@ -191,6 +191,12 @@ return 3;
   else
     {
       printf("Unable to determine factors, try again.\n");
+
+out = fopen(LOGS_PATH, "w");
+  for(int i = 0; i < count && i < LOGS_COUNT; i++){
+	  fprintf(out, "%lf\n", times[i]);
+  }
+  fclose(out);
 #if defined(SPEC_CPU)
 	exit(0);
 #else
