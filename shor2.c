@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
     struct log_struct log;
     fread(&log, sizeof(struct log_struct), 1, file);
 
-    int c = log.control1;
+    int c = log.control;
     int tg = log.target;
 
     // 2. читаем quantum_reg_struct (но указатели игнорируем!)
